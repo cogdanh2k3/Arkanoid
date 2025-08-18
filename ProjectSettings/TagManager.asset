@@ -2,8 +2,21 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!78 &1
 TagManager:
-  serializedVersion: 2
-  tags: []
+  serializedVersion: 3
+  tags:
+  - brick
+  - diamond
+  - ballsbrick
+  - fastbrick
+  - ball
+  - death
+  - laserbrick
+  - slowbrick
+  - shrink
+  - expand
+  - laser
+  - bigball
+  - Ball
   layers:
   - Default
   - TransparentFX
@@ -38,6 +51,17 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 651669899
+    locked: 0
+  - name: Paddle
+    uniqueID: 2682408645
+    locked: 0
+  - name: Ball
+    uniqueID: 827234719
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
+  m_RenderingLayers:
+  - Default
