@@ -1,16 +1,14 @@
+using System;
 using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public static event Action<Ball> OnBallDeath;
+
+    public void Die()
     {
-        
+        OnBallDeath?.Invoke(this);
+        Destroy(gameObject, 1);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
