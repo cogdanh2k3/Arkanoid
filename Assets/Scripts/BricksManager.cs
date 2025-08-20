@@ -139,5 +139,16 @@ public class BricksManager : MonoBehaviour
         return allLevels;
     }
 
-
+    public void LoadNextLevel()
+    {
+        this.CurrentLevelIndex++;
+        if(this.CurrentLevelIndex >= this.LevelsList.Count)
+        {
+            GameManager.Instance.ShowVictoryScreen();
+        }
+        else
+        {
+            this.ReloadLevel(CurrentLevelIndex);
+        }
+    }
 }
