@@ -44,11 +44,14 @@ public class BricksManager : MonoBehaviour
 
     public int CurrentLevelIndex;
 
+    public static event Action OnLevelLoaded;
+
     private void Start()
     {
         bricksContainer = new GameObject("BricksContainer");
         LevelsList = this.LoadLevelsData();
         this.GenerateBricks();
+
     }
 
     public void ReloadLevel(int level)
@@ -100,6 +103,7 @@ public class BricksManager : MonoBehaviour
         }
 
         InitialBricksCount = RemainingBricks.Count;
+        OnLevelLoaded?.Invoke();
     }
 
     private List<int[,]> LoadLevelsData()
