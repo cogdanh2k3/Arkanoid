@@ -55,6 +55,28 @@ public class BallsManager : MonoBehaviour
         }
     }
 
+    public void SpawnBalls(Vector3 position, int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            Ball spawnedBall = Instantiate(ballPrefab, position, Quaternion.identity) as Ball;
+
+            Rigidbody2D spawnedBallRb = spawnedBall.GetComponent<Rigidbody2D>();
+            spawnedBallRb.bodyType = RigidbodyType2D.Dynamic;
+            spawnedBallRb.AddForce(new Vector2(0, initialBallSpeed));
+            this.Balls.Add(spawnedBall);
+        }
+    }
+
+    public void ResetBall()
+    {
+        foreach (var ball in this.Balls.ToList())
+        {
+            Destroy(ball.gameObject);
+        }
+        InitBall();
+    } 
+    
     private void InitBall()
     {
         Vector3 paddlePosition = Paddle.Instance.gameObject.transform.position;
@@ -67,15 +89,5 @@ public class BallsManager : MonoBehaviour
         {
             initialBall
         };
-    }
-
-    public void ResetBall()
-    {
-        foreach (var ball in this.Balls.ToList())
-        {
-            Destroy(ball.gameObject);
-        }
-
-        InitBall();
     }
 }

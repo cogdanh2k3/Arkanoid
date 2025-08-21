@@ -17,6 +17,9 @@ TagManager:
   - laser
   - bigball
   - Ball
+  - Paddle
+  - DeathCollider
+  - DeathWall
   layers:
   - Default
   - TransparentFX
