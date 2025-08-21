@@ -220,6 +220,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1495822adec4fdb4d942ab410ba1a58c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  extendShrinkDuration: 10
+  paddleWidth: 2
+  paddleHeight: 0.28
 --- !u!61 &656173
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1365,9 +1368,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AvailableBuffs:
   - {fileID: 2516815628375602014, guid: 65913b06d59b6124f93bf386bf2c3753, type: 3}
-  AvailableDebuffs: []
+  - {fileID: 2450551933681369269, guid: c7571eab607e0d34dbe486b8cfca70cd, type: 3}
+  AvailableDebuffs:
+  - {fileID: 5512585803094448535, guid: 358d9a96ff2463d4a9945281b1c890da, type: 3}
   BuffChance: 15
-  DebuffChance: 0
+  DebuffChance: 10
 --- !u!1 &939816669
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class Paddle : MonoBehaviour
@@ -24,22 +25,73 @@ public class Paddle : MonoBehaviour
 
     private Camera mainCamera;
     private SpriteRenderer sr;
+    private BoxCollider2D boxCol;
 
     private float paddleInitialY;
     private float defaultPaddleWidthInPixel = 200;
     private float defaultLeftClamp = 135;
     private float defaultRightClamp = 410;
 
+    public float extendShrinkDuration = 10;
+    public float paddleWidth = 2;
+    public float paddleHeight = 0.28f;
+
+    public bool PaddleIsTranforming { get; set; }
+
     private void Start()
     {
         mainCamera = Camera.main;
         paddleInitialY = this.transform.position.y;
         sr = GetComponent<SpriteRenderer>();
-
+        boxCol = GetComponent<BoxCollider2D>();
+            
     }
     private void Update()
     {
         PaddleMovement();
+    }
+
+    public void StartWithAnimation(float newWidth)
+    {
+        StartCoroutine(AnimatePaddleWidth(newWidth));
+    }
+
+    public IEnumerator AnimatePaddleWidth(float width)
+    {
+        PaddleIsTranforming = true;
+        StartCoroutine(ResetPaddleWidthAfterTime(extendShrinkDuration));
+
+        if (width > sr.size.x)
+        {
+            float currentWidth = sr.size.x;
+            while(currentWidth < width)
+            {
+                currentWidth += Time.deltaTime * 2;
+                sr.size = new Vector2(currentWidth,paddleHeight);
+                boxCol.size = new Vector2(currentWidth, paddleHeight);
+                yield return null;
+            }
+        }
+        else
+        {
+            float currentWidth = sr.size.x;
+            while(currentWidth > width)
+            {
+                currentWidth -= Time.deltaTime * 2;
+                sr.size = new Vector2(currentWidth, paddleHeight);
+                boxCol.size = new Vector2(currentWidth, paddleHeight);
+                yield return null;
+            }
+        }
+
+        PaddleIsTranforming = false;
+
+    }
+
+    private IEnumerator ResetPaddleWidthAfterTime(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        this.StartWithAnimation(this.paddleWidth);
     }
 
     private void PaddleMovement()
