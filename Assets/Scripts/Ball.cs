@@ -25,7 +25,7 @@ public class Ball : MonoBehaviour
         Destroy(gameObject, 1);
     }
 
-    public void StartLightningBall()
+    public void EnableLightningBall()
     {
         if (!this.isLightningBall)
         {
@@ -33,20 +33,12 @@ public class Ball : MonoBehaviour
             sr.enabled = false;
 
             lightningBallEffect.gameObject.SetActive(true);
-            StartCoroutine(StopLightningBallAfterTime(lightningBallEffectDuration));
 
             OnLightningBallEnable?.Invoke(this);
         }
     }
 
-    private IEnumerator StopLightningBallAfterTime(float seconds)
-    {
-        yield return new WaitForSeconds(seconds);
-
-        StopLightningBall();
-    }
-
-    private void StopLightningBall()
+    public void DisableLightningBall()
     {
         if (isLightningBall)
         {

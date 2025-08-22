@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
@@ -32,6 +33,9 @@ public class BallsManager : MonoBehaviour
     public float initialBallSpeed = 250;
     public List<Ball> Balls { get; set; }
 
+    public bool IsLightningBallActive { get; set; }
+    private Coroutine lightningRoutine;
+
     private void Start()
     {
         InitBall();
@@ -61,15 +65,41 @@ public class BallsManager : MonoBehaviour
         {
             Ball spawnedBall = Instantiate(ballPrefab, position, Quaternion.identity) as Ball;
 
-            if (isLightningBall)
+            if (isLightningBall || IsLightningBallActive)
             {
-                spawnedBall.StartLightningBall();
+                spawnedBall.EnableLightningBall();
             }
 
             Rigidbody2D spawnedBallRb = spawnedBall.GetComponent<Rigidbody2D>();
             spawnedBallRb.bodyType = RigidbodyType2D.Dynamic;
             spawnedBallRb.AddForce(new Vector2(0, initialBallSpeed));
             this.Balls.Add(spawnedBall);
+        }
+    }
+
+    public void ActiveLightningBall(float duration)
+    {
+        if(lightningRoutine != null)
+        {
+            StopCoroutine(lightningRoutine);
+        }
+
+        lightningRoutine = StartCoroutine(LightningBalRoutine(duration));
+    }
+
+    private IEnumerator LightningBalRoutine(float duration)
+    {
+        IsLightningBallActive = true;
+        foreach (var ball in Balls)
+        {
+            ball.EnableLightningBall();
+        }
+        yield return new WaitForSeconds(duration);
+
+        IsLightningBallActive = false;
+        foreach (var ball in Balls)
+        {
+            ball.DisableLightningBall();
         }
     }
 

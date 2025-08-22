@@ -42,14 +42,16 @@ public class Brick : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Ball ball = collision.gameObject.GetComponent<Ball>();
-
         ApplyCollisionLogic(ball);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Ball ball = collision.gameObject.GetComponent<Ball>();
-        ApplyCollisionLogic(ball);
+        if (ball != null)
+        {
+            ApplyCollisionLogic(ball);
+        }
     }
 
     private void ApplyCollisionLogic(Ball ball)
