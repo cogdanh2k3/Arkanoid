@@ -20,6 +20,9 @@ TagManager:
   - Paddle
   - DeathCollider
   - DeathWall
+  - Collectiable
+  - Collectable
+  - Projectile
   layers:
   - Default
   - TransparentFX
