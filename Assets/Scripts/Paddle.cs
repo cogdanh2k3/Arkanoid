@@ -159,7 +159,7 @@ public class Paddle : MonoBehaviour
         float fireCooldown = .5f;
         float fireCooldownLeft = 0;
 
-        float shootingDuration = 10f;
+        float shootingDuration = 5f;
         float shootingDurationLeft = shootingDuration;
 
         //Debug.Log("START SHOOTING!");

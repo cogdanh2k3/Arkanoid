@@ -4,27 +4,9 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    #region Singleton
-
-    private static GameManager _instance;
-    public static GameManager Instance => _instance; // property để bên ngoài truy cập vào, khi goị GameManager.Instance -> trả vè _instance
-
-    private void Awake()
-    {
-        if (_instance != null)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            _instance = this;
-        }
-    }
-
-    #endregion
+    public static GameManager Instance { get; set; }
 
     public GameObject gameOverScreen;
-    public GameObject gameVictoryScreen;
 
     public int AvailableLives = 3;
     public int Lives { get; set; }
@@ -33,12 +15,27 @@ public class GameManager : MonoBehaviour
 
     public static event Action<int> OnLiveLost;
 
+    public event EventHandler OnGamePaused;
+    public event EventHandler OnGameResume;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     private void Start()
     {
         Lives = AvailableLives;
         Screen.SetResolution(540, 960, false); //false - window; true - full screen
         Ball.OnBallDeath += OnBallDeath;
         Brick.OnBrickDestruction += OnBrickDestruction;
+
+        GameInput.Instance.OnMenuBtnPressed += GameInput_OnMenuBtnPressed;
+    }
+
+    private void GameInput_OnMenuBtnPressed(object sender, EventArgs e)
+    {
+        PauseResumeGame();
     }
 
     private void OnBrickDestruction(Brick brick)
@@ -53,7 +50,32 @@ public class GameManager : MonoBehaviour
 
     public void RestartGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SceneLoader.LoadScene(SceneLoader.Scene.GameScene);
+    }
+
+    public void PauseResumeGame()
+    {
+        if(Time.timeScale == 1f)
+        {
+            PauseGame();
+        }
+        else
+        {
+            ContinueGame();
+        }
+    }
+
+    public void PauseGame()
+    {
+        Time.timeScale = 0f;
+        OnGamePaused?.Invoke(this, EventArgs.Empty);
+    }
+
+    public void ContinueGame()
+    {
+        Time.timeScale = 1f;
+        OnGameResume?.Invoke(this, EventArgs.Empty);
+
     }
 
     private void OnBallDeath(Ball ball)
@@ -84,10 +106,5 @@ public class GameManager : MonoBehaviour
     private void OnDisable()
     {
         Ball.OnBallDeath -= OnBallDeath;
-    }
-
-    public void ShowVictoryScreen()
-    {
-        gameVictoryScreen.SetActive(true);
     }
 }

@@ -148,7 +148,7 @@ public class BricksManager : MonoBehaviour
         this.CurrentLevelIndex++;
         if(this.CurrentLevelIndex >= this.LevelsList.Count)
         {
-            GameManager.Instance.ShowVictoryScreen();
+            SceneLoader.LoadScene(SceneLoader.Scene.EndGameScene);
         }
         else
         {
