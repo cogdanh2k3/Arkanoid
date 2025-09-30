@@ -21,12 +21,12 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        Time.timeScale = 1f;
     }
 
     private void Start()
     {
         Lives = AvailableLives;
-        Screen.SetResolution(540, 960, false); //false - window; true - full screen
         Ball.OnBallDeath += OnBallDeath;
         Brick.OnBrickDestruction += OnBrickDestruction;
 

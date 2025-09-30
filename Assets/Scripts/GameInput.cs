@@ -16,6 +16,13 @@ public class GameInput : MonoBehaviour
         inputAction = new InputActions();
         inputAction.Enable();
         inputAction.Player.Menu.performed += Menu_performed;
+
+    }
+
+    public Vector2 GetMousePos()
+    {
+        Vector2 inputVector = inputAction.Player.Movement.ReadValue<Vector2>();
+        return inputVector;
     }
 
     private void Menu_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)

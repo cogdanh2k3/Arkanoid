@@ -26,16 +26,17 @@ public class Paddle : MonoBehaviour
     private Camera mainCamera;
     private SpriteRenderer sr;
     private BoxCollider2D boxCol;
+    private Rigidbody2D paddleRb;
 
     public GameObject leftMuzzle;
     public GameObject rightMuzzle;
     public Projectile bulletPrefab;
+    public Collider2D leftWall;
+    public Collider2D rightWall;
+
 
 
     private float paddleInitialY;
-    private float defaultPaddleWidthInPixel = 200;
-    private float defaultLeftClamp = 135;
-    private float defaultRightClamp = 410;
 
     public float extendShrinkDuration = 10;
     public float paddleWidth = 2;
@@ -51,7 +52,7 @@ public class Paddle : MonoBehaviour
         paddleInitialY = this.transform.position.y;
         sr = GetComponent<SpriteRenderer>();
         boxCol = GetComponent<BoxCollider2D>();
-            
+        paddleRb = GetComponent<Rigidbody2D>();
     }
     private void Update()
     {
@@ -109,17 +110,19 @@ public class Paddle : MonoBehaviour
 
     private void PaddleMovement()
     {
-        float paddleShift = (defaultPaddleWidthInPixel - ((defaultPaddleWidthInPixel / 2) * this.sr.size.x)) / 2;
+        Vector2 mouseScreenPos = GameInput.Instance.GetMousePos();
+        
+        Vector3 mouseWorldPos = mainCamera.ScreenToWorldPoint(new Vector3(mouseScreenPos.x, mouseScreenPos.y));
 
-        float leftClamp = defaultLeftClamp - paddleShift;
-        float rightClamp = defaultRightClamp + paddleShift;
+        float leftLimit = leftWall.bounds.max.x + (sr.size.x / 2f);
+        float rightLimit = rightWall.bounds.min.x - (sr.size.x / 2f);
 
-        float mousePositionPixels = Mathf.Clamp(Input.mousePosition.x, leftClamp, rightClamp);
-        float mousePositionWorldX = mainCamera.ScreenToWorldPoint(new Vector3(mousePositionPixels, 0, 0)).x;
+        float clampedX = Mathf.Clamp(mouseWorldPos.x, leftLimit, rightLimit);
 
-        this.transform.position = new Vector3(mousePositionWorldX, paddleInitialY, 0);
+        Vector2 targetPos = new Vector2(clampedX, paddleInitialY);
 
-        //Debug.Log("Mouse pixel position: " + Input.mousePosition);
+        paddleRb.MovePosition(targetPos);
+
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
